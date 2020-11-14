@@ -8,6 +8,6 @@ This data set is also aimed at answering a critical question.
 
 *Do we program self driving cars to fit Indian driving conditions already or wait for the infrastructure to match suitable conditions for safe operation of self driving vehicles?*
 
-### Using Canny edge detector
+### Example: using Canny edge detector
 <img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshot1.png" width="800">
 <img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshotdetect.png" width="800">
