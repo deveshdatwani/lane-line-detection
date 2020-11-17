@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 
 cap = cv2.VideoCapture('../data/car2.mp4') 
-lower_white = np.array([190,150,150]) 
-upper_white = np.array([255,255,255])
 
 #cordinates of ROI 
 X1 = 180 
@@ -17,58 +15,57 @@ class image_processor():
     
     def resize(self, frame):
 
-        frame = cv2.resize(frame, (frame.shape[1]//2, frame.shape[0]//2))
-        
+        frame = cv2.resize(frame, (frame.shape[1]//2, frame.shape[0]//2))        
         return frame
 
     def gaus_blur(self, frame, kernel_size=(5,5)):
 
         frame = cv2.GaussianBlur(frame, kernel_size, 5) 
-        
         return frame
     
     def im_height(self, image):
 
-        height = image.shape[0] 
-        
+        height = image.shape[0]         
         return height
 
     def im_canny(self, image):
 
-        image = cv2.Canny(image, 50, 150) 
-        
+        image = cv2.Canny(image, 50, 150)       
         return image
 
     def hough_lines(self, image):
 
-        lines_detected = cv2.HoughLinesP(image, 2, np.pi / 180, 100,np.array([]), minLineLength = 10, maxLineGap = 50) 
-        
+        lines_detected = cv2.HoughLinesP(image, 2, 
+                                        np.pi / 180, 100, 
+                                        np.array([]), 
+                                        minLineLength = 10, 
+                                        maxLineGap = 50) 
         return lines_detected
 
-class lane_process():
+class lane_processor():
 
     def lane_visuals(self, hough_lines):
-
-        if hough_line is not None: 
-
-            for pts in hough_line:
         
+        if hough_line is not None:     
+            for pts in hough_line:
+
                 x1,y1,x2,y2 = pts[0]
                 points = np.array([[x1,y1],[x2,y2]])
                 cv2.polylines(frame, [points], 1, (0,0,255), 5)
-        else:
-            
-            cv2.putText(frame, 'No Lanes Detected',(300,400),cv2.FONT_HERSHEY_COMPLEX ,1, (0,255,255), 3)
         
+        else:
+            cv2.putText(frame, 'No Lanes Detected',(300,400), 
+                        cv2.FONT_HERSHEY_COMPLEX ,1, 
+                        (0,255,255), 3)      
         return None
 
 #initialising the image processor object 
 process = image_processor()
 
 #initialsing the line calcultor 
-line_calculate = lane_process() 
+line_calculate = lane_processor() 
 
-#displaying the video 
+#process and display video file
 while cap.isOpened():
 
     ret, frame = cap.read() 
@@ -86,28 +83,13 @@ while cap.isOpened():
     segment = cv2.bitwise_and(image, ones)
     cv2.imshow('segment1', segment)
     
-    #processing the segment
+    #processing the segment and visualising lanes
     segment = process.im_canny(segment) 
-    hough_line = process.hough_lines(segment) 
-    
+    hough_line = process.hough_lines(segment)     
     line_calculate.lane_visuals(hough_line)
-
-    '''
-    if hough_line is not None: 
-
-        for pts in hough_line:
-        
-            x1,y1,x2,y2 = pts[0]
-            points = np.array([[x1,y1],[x2,y2]])
-            cv2.polylines(frame, [points], 1, (0,0,255), 5)
-    else:
-        cv2.putText(frame, 'No Lanes Detected',(300,400),cv2.FONT_HERSHEY_COMPLEX ,1
-                , (0,0,255), 5 )
-   '''
 
     cv2.imshow('original', frame) 
     if cv2.waitKey(25) & 0xFF == ord('q'):
+        cap.release()
+        cv2.destroyAllWindows() 
         break
-
-cap.release()
-cv2.destroyAllWindows()
