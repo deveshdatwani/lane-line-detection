@@ -123,11 +123,15 @@ while cap.isOpened():
     #all_lines = line_calculate.cal_lines(hough=hough_line, segment=segment)
     #segment = line_calculate.visualize(all_lines, frame)
     
-    for pts in hough_line:
+    if hough_line is not None: 
+
+        for pts in hough_line:
         
-        x1,y1,x2,y2 = pts[0]
-        points = np.array([[x1,y1],[x2,y2]])
-        cv2.polylines(frame, [points], 1, (0,0,255), 5)
+            x1,y1,x2,y2 = pts[0]
+            points = np.array([[x1,y1],[x2,y2]])
+            cv2.polylines(frame, [points], 1, (0,0,255), 5)
+    else:
+        print('No lanes detected')
 
     cv2.imshow('original', frame) 
     cv2.imshow('segment', segment) 
