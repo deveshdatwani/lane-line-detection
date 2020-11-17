@@ -14,6 +14,7 @@ I'm using Python here to detect lanes, curbs and other objects. Being an interpr
 ### Example: using Canny edge detector
 <img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshot1.png" width="800">
 <img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshotdetect.png" width="800">
+<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/lane-detect.png" width="800">
 
 
 ### Neural Networks for lane detection
