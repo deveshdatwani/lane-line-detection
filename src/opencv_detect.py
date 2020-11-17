@@ -1,7 +1,7 @@
 import cv2 
 import numpy as np
 
-cap = cv2.VideoCapture('../data/car6.mp4') 
+cap = cv2.VideoCapture('../data/car2.mp4') 
 lower_white = np.array([190,150,150]) 
 upper_white = np.array([255,255,255])
 
@@ -57,7 +57,8 @@ class lane_process():
                 points = np.array([[x1,y1],[x2,y2]])
                 cv2.polylines(frame, [points], 1, (0,0,255), 5)
         else:
-            print('No lanes detected')
+            
+            cv2.putText(frame, 'No Lanes Detected',(300,400),cv2.FONT_HERSHEY_COMPLEX ,1, (0,255,255), 3)
         
         return None
 
@@ -89,6 +90,9 @@ while cap.isOpened():
     segment = process.im_canny(segment) 
     hough_line = process.hough_lines(segment) 
     
+    line_calculate.lane_visuals(hough_line)
+
+    '''
     if hough_line is not None: 
 
         for pts in hough_line:
@@ -99,9 +103,10 @@ while cap.isOpened():
     else:
         cv2.putText(frame, 'No Lanes Detected',(300,400),cv2.FONT_HERSHEY_COMPLEX ,1
                 , (0,0,255), 5 )
+   '''
 
     cv2.imshow('original', frame) 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(25) & 0xFF == ord('q'):
         break
 
 cap.release()
