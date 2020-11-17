@@ -47,52 +47,19 @@ class image_processor():
 
 class lane_process():
 
-    def cal_lines(self, hough, segment):
+    def lane_visuals(self, hough_lines):
 
-        left = [] 
-        right = []
+        if hough_line is not None: 
 
-        for line in hough:
-           
-            x1, y1, x2, y2 = line[0] 
-            line_parameters = np.polyfit((x1,x2), (y1,y2), 1) 
-            slope = line_parameters[0] 
-            y_intercept =line_parameters[1]
-
-            if slope < 0: 
-                left.append((slope, y_intercept)) 
-            else:
-                right.append((slope, y_intercept))
+            for pts in hough_line:
         
-        left_avg = np.average(left, axis=0) 
-        right_avg = np.average(right,  axis=0)
-        left_line = line_calculate.calculate_coordinates(segment, left_avg)
-        right_line = line_calculate.calculate_coordinates(segment, right_avg)
+                x1,y1,x2,y2 = pts[0]
+                points = np.array([[x1,y1],[x2,y2]])
+                cv2.polylines(frame, [points], 1, (0,0,255), 5)
+        else:
+            print('No lanes detected')
         
-        return np.array([left_line, right_line])
-
-    def calculate_coordinates(self, segment, parameters):
-
-        slope, intercept = parameters 
-        y1 = segment.shape[0] 
-        y2 = int(y1 - 150)
-        x1 = int((y1 - intercept) / slope) 
-        x2 = int((y2 - intercept) / slope)
-
-        return np.array([x1, y1, x2, y2])
-
-    def visualize(self, lines, frame):
-
-        lines_visualize = np.zeros_like(frame)
-
-        if lines is not None:
-
-            for x1, y1, x2, y2  in lines:
-
-                cv2.line(lines_visualize, (x1,y1), (x2,y2), (0,255,0), 5)
-
-        return lines_visualize
-
+        return None
 
 #initialising the image processor object 
 process = image_processor()
@@ -109,19 +76,18 @@ while cap.isOpened():
     image = process.resize(image) 
     height = process.im_height(image) 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image = cv2.Canny(image, 50, 150)
     
     #hardcoding region of interest 
     ones = np.zeros_like(image)
-    polygon = np.array([[(X1, height-140),(X2, height-140),(X3, Y3)]])
-    cv2.fillConvexPoly(ones, polygon, (255,255,255)) 
-    segment = cv2.bitwise_and(image, ones) 
+    polygon = np.array([[(X1, height-150),(X2, height-150),(X3, Y3)]])
+    cv2.fillConvexPoly(ones, polygon, (255,255,255), 0) 
+    segment = cv2.bitwise_and(image, ones)
+    cv2.imshow('segment1', segment)
     
     #processing the segment
     segment = process.im_canny(segment) 
-    hough_line = process.hough_lines(segment)
- 
-    #all_lines = line_calculate.cal_lines(hough=hough_line, segment=segment)
-    #segment = line_calculate.visualize(all_lines, frame)
+    hough_line = process.hough_lines(segment) 
     
     if hough_line is not None: 
 
@@ -131,11 +97,11 @@ while cap.isOpened():
             points = np.array([[x1,y1],[x2,y2]])
             cv2.polylines(frame, [points], 1, (0,0,255), 5)
     else:
-        print('No lanes detected')
+        cv2.putText(frame, 'No Lanes Detected',(300,400),cv2.FONT_HERSHEY_COMPLEX ,1
+                , (0,0,255), 5 )
 
     cv2.imshow('original', frame) 
-    cv2.imshow('segment', segment) 
-    if cv2.waitKey(25) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
