@@ -12,9 +12,9 @@ This data set is also aimed at answering a critical question.
 I'm using Python here to detect lanes, curbs and other objects. Being an interpreted language, it is grossly inefficient, but the detection itself isn't being used for any kind of production purposes, so it's all cool for now.
 
 ### Example: using Canny edge detector
-<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshot1.png" width="800">
-<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshotdetect.png" width="800">
-<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/lane-detect.png" width="800">
+<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshot1.png" width="500">
+<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshotdetect.png" width="500">
+<img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/lane-detect.png" width="500">
 
 
 ### Neural Networks for lane detection
