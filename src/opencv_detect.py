@@ -1,7 +1,7 @@
 import cv2 
 import numpy as np
 
-cap = cv2.VideoCapture('../data/car2.mp4') 
+cap = cv2.VideoCapture('../data/car6.mp4') 
 
 #cordinates of ROI 
 X1 = 180 
@@ -29,7 +29,7 @@ class image_processor():
         return height
 
     def im_canny(self, image):
-
+        
         image = cv2.Canny(image, 50, 150)       
         return image
 
@@ -70,18 +70,19 @@ while cap.isOpened():
 
     ret, frame = cap.read() 
     image = frame.copy() 
+
+    #resizing, grayscaling the image
     frame = process.resize(frame)
     image = process.resize(image) 
     height = process.im_height(image) 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = cv2.Canny(image, 50, 150)
-    
+
     #hardcoding region of interest 
     ones = np.zeros_like(image)
     polygon = np.array([[(X1, height-150),(X2, height-150),(X3, Y3)]])
     cv2.fillConvexPoly(ones, polygon, (255,255,255), 0) 
     segment = cv2.bitwise_and(image, ones)
-    cv2.imshow('segment1', segment)
     
     #processing the segment and visualising lanes
     segment = process.im_canny(segment) 
