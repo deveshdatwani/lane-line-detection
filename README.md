@@ -1,6 +1,6 @@
 ### Context
 
-Using canny edge detection algorithm to detect lanes on the streets of Mumbai, India.
+Detecting lanes lines on the streets of Mumbai, India.
 
 ### Example: using Canny edge detector
 <img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/screenshot1.png" width="500">
