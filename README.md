@@ -21,4 +21,4 @@ Mapping lanes
 <img src="https://github.com/deveshdatwani/self-driving-cars-India/blob/master/data/lane-detect.png" width="500">
 
 
-### Neural Networks for lane detection
+### Technique 2: Neural Networks for lane detection
